@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RIDEX | Sign in</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/layout :: navbar('')}"></div>
+
+    <h1 class="page-title">Welcome to RideX</h1>
+    <p class="sub">Sign in or create an account to continue.</p>
+
+    <div class="grid-2">
+        <form class="card" th:action="@{/users/login}" th:object="${loginDTO}" method="post">
+            <h2 class="card-title">Sign in</h2>
+
+            <div class="alert" th:if="${error}" th:text="${error}"></div>
+
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="email" th:field="*{email}">
+                <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" type="password" th:field="*{password}">
+                <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
+            <button type="submit" class="btn">Sign in</button>
+        </form>
+
+        <div class="card">
+            <h2 class="card-title">New to RideX?</h2>
+            <p class="sub">Create a free account to rent bikes, list your own or share rides.</p>
+            <a class="btn btn-outline" th:href="@{/users/register}">Create account</a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
