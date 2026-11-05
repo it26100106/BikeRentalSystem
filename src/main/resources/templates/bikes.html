@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bike Management</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<h1>Bike Management</h1>
+
+<p th:if="${message}" th:text="${message}"></p>
+
+<a th:href="@{/bikes/add}">Add New Bike</a> |
+<a th:href="@{/bikes(sort='availability')}">Sort by Availability</a> |
+<a th:href="@{/bikes}">Original Order</a>
+
+<br><br>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Model</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Price per Day</th>
+        <th>Available</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="b : ${bikes}">
+        <td th:text="${b.bikeId}"></td>
+        <td th:text="${b.model}"></td>
+        <td th:text="${b.type}"></td>
+        <td th:text="${b.location}"></td>
+        <td th:text="${b.pricePerDay}"></td>
+        <td th:text="${b.available} ? 'Yes' : 'No'"></td>
+        <td th:text="${b.status}"></td>
+        <td>
+            <a th:href="@{/bikes/edit/{id}(id=${b.bikeId})}">Edit</a>
+            <form th:action="@{/bikes/delete}" method="post" style="display:inline">
+                <input type="hidden" name="bikeId" th:value="${b.bikeId}">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

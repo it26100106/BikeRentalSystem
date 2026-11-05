@@ -1,0 +1,2 @@
+B001|Honda CB150|Motorbike|Colombo|3500.0|true|Active
+B002|Yamaha FZ|Motorbike|Kandy|3000.0|false|Maintenance

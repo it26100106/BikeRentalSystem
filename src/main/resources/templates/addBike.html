@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Bike</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<h1>Add New Bike</h1>
+
+<p class="error" th:if="${error}" th:text="${error}"></p>
+
+<form th:action="@{/bikes/add}" method="post">
+
+    <label>Bike ID</label>
+    <input type="text" name="bikeId" th:value="${nextId}" readonly>
+
+    <label>Model</label>
+    <input type="text" name="model" required>
+
+    <label>Type</label>
+    <select name="type">
+        <option value="Motorbike">Motorbike</option>
+        <option value="Scooter">Scooter</option>
+        <option value="Bicycle">Bicycle</option>
+    </select>
+
+    <label>Location</label>
+    <input type="text" name="location" required>
+
+    <label>Price per Day</label>
+    <input type="number" name="pricePerDay" step="0.01" required>
+
+    <label>Available</label>
+    <select name="available">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+    </select>
+
+    <label>Status</label>
+    <select name="status">
+        <option value="Active">Active</option>
+        <option value="Maintenance">Maintenance</option>
+    </select>
+
+    <br><br>
+    <button type="submit">Save Bike</button>
+    <a th:href="@{/bikes}">Cancel</a>
+</form>
+
+</body>
+</html>
