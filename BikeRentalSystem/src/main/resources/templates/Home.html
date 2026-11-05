@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RIDEX | Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/layout :: navbar('home')}"></div>
+
+    <!-- Hero + search -->
+    <section class="hero">
+        <div>
+            <h1>Ride more.<span>Own less.</span></h1>
+            <p>Rent a bike, list yours, or offer a shared ride.</p>
+            <div class="hero-buttons">
+                <a class="btn" th:href="@{/bikes}">Browse bikes</a>
+                <a class="btn btn-outline" th:href="@{/rides}">Find a shared ride</a>
+            </div>
+        </div>
+
+        <!-- GET /bikes?town=..&startDate=..&endDate=..&type=.. (the Bike module can read these) -->
+        <form class="card" th:action="@{/bikes}" method="get">
+            <h2 class="card-title">Find your bike</h2>
+            <div class="field">
+                <label for="town">Pickup town</label>
+                <input id="town" name="town" type="text" placeholder="e.g. Colombo">
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label for="startDate">Start date</label>
+                    <input id="startDate" name="startDate" type="date">
+                </div>
+                <div class="field">
+                    <label for="endDate">End date</label>
+                    <input id="endDate" name="endDate" type="date">
+                </div>
+            </div>
+            <div class="field">
+                <label for="type">Type</label>
+                <select id="type" name="type">
+                    <option value="">Any</option>
+                    <option value="Motorbike">Motorbike</option>
+                    <option value="Scooter">Scooter</option>
+                    <option value="Bicycle">Bicycle</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Search bikes</button>
+        </form>
+    </section>
+
+    <!-- Three quick actions -->
+    <section class="grid-3">
+        <div class="card feature">
+            <h3>Rent a bike</h3>
+            <p>Motorbikes, scooters and bicycles from local owners.</p>
+            <a class="btn btn-outline" th:href="@{/bikes}">See bikes</a>
+        </div>
+        <div class="card feature">
+            <h3>Share a ride</h3>
+            <p>Join a driver's trip or publish your own.</p>
+            <a class="btn btn-outline" th:href="@{/rides}">See rides</a>
+        </div>
+        <div class="card feature">
+            <h3>List your bike</h3>
+            <p>Add your bike and approve requests in order.</p>
+            <a th:if="${loggedInUser == null}" class="btn btn-outline" th:href="@{/users/register}">Create account</a>
+            <a th:if="${loggedInUser != null}" class="btn btn-outline" th:href="@{/bikes/add}">Add a bike</a>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <h2 class="section-title">How it works</h2>
+    <section class="grid-3">
+        <div class="card step">
+            <div class="num">01</div>
+            <h3>Pick a bike</h3>
+            <p>Filter by town and type.</p>
+        </div>
+        <div class="card step">
+            <div class="num">02</div>
+            <h3>Book and pay</h3>
+            <p>The total is calculated for you.</p>
+        </div>
+        <div class="card step">
+            <div class="num">03</div>
+            <h3>Ride and review</h3>
+            <p>Rate the bike after your rental.</p>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>
