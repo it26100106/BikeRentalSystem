@@ -12,10 +12,6 @@ public class Payment {
     private String status;
     private String method;
 
-    public Payment() {
-        this("P000", "B000", "U000", 0.0, LocalDate.now(), "Pending", "Unknown");
-    }
-
     public Payment(String paymentId, String bookingId, String userId, double amount, LocalDate paymentDate, String status, String method) {
         this.paymentId = paymentId;
         this.bookingId = bookingId;
@@ -26,11 +22,9 @@ public class Payment {
         this.method = method;
     }
 
-    /** Children replace this. By default nothing is checked. */
     public void processPayment() throws PaymentException {
         this.status = "Pending";
     }
-
 
     public static String createId(int existingPayments) {
         return String.format("P%03d", existingPayments + 1);
@@ -41,8 +35,7 @@ public class Payment {
     }
 
     public void displayPaymentDetails(String title) {
-        System.out.println(title + " " + paymentId + " | booking " + bookingId + " | Rs." + amount
-                + " | " + method + " | " + status + " | " + paymentDate);
+        System.out.println(title + " " + paymentId + " | booking " + bookingId + " | Rs." + amount + " | " + method + " | " + status + " | " + paymentDate);
     }
 
     public String getPaymentId()       { return paymentId; }

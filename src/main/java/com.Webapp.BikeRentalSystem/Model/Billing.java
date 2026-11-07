@@ -77,31 +77,12 @@ public class Billing {
     public String getEmail() { return email; }
     public String getPhone() { return phone; }
 
-    public void setBookingId(String bookingId) {
-        this.bookingId = bookingId;
-    }
+    public void setBookingId(String bookingId) { this.bookingId = bookingId;}
+    public void setUserId(String userId) { this.userId = userId;}
+    public void setPricePerDay(double pricePerDay) { this.pricePerDay = pricePerDay;}
+    public void setDefaultDays(int defaultDays) { this.defaultDays = defaultDays;}
+    public void setCustomerName(String customerName) { this.customerName = customerName;}
+    public void setEmail(String email) { this.email = email;}
+    public void setPhone(String phone) { this.phone = phone;}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public void setPricePerDay(double pricePerDay) {
-        this.pricePerDay = pricePerDay;
-    }
-
-    public void setDefaultDays(int defaultDays) {
-        this.defaultDays = defaultDays;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 }
