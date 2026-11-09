@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+    <h2>Bike Rentals</h2>
+    <a href="history.html" class="back-link" style="text-decoration: none;">Payment History</a>
+</header>
+
+<form action="payment.html" method="GET" class="checkout-container">
+    <!-- passed on to payment.html so it knows which booking this is -->
+    <input type="hidden" name="bookingId" id="bookingId">
+
+    <div class="left-side">
+        <h1>Customer Details</h1>
+        <label>Full Name *</label>
+        <input type="text" name="fullname" id="fullname" placeholder="Type your full name" required>
+
+        <label>E-mail *</label>
+        <input type="email" name="email" id="email" placeholder="name@example.com" required>
+
+        <label>Phone Number *</label>
+        <input type="tel" name="phone" id="phone" placeholder="077 123 4567" required>
+
+        <div class="date-range-container">
+            <div>
+                <label for="start-date">Start Date *</label>
+                <input type="date" id="start-date" name="start_date" required>
+            </div>
+
+            <div>
+                <label for="end-date">End Date *</label>
+                <input type="date" id="end-date" name="end_date" required>
+            </div>
+        </div>
+        <p id="date-error" class="error-text"></p>
+    </div>
+
+    <div class="right-side">
+        <h3>Rental Summary</h3>
+        <div class="summary-item">
+            <span id="summary-days">-</span>
+            <span id="summary-amount">-</span>
+        </div>
+        <p id="summary-rate" class="hint"></p>
+
+        <div>
+            <hr>
+            <div class="summary-total">
+                <strong>Total</strong>
+                <strong id="summary-total">-</strong>
+            </div>
+            <button type="submit" id="proceed-btn" class="checkout-btn">Proceed to Payment</button>
+        </div>
+    </div>
+
+</form>
+
+<script>
+    // Which booking? e.g. billing.html?booking=B102  (B101 if nothing is given)
+    const bookingId = new URLSearchParams(location.search).get('booking') || 'B101';
+
+    const startInput = document.getElementById('start-date');
+    const endInput   = document.getElementById('end-date');
+    const errorBox   = document.getElementById('date-error');
+    const proceedBtn = document.getElementById('proceed-btn');
+
+    // turns a Date into 2025-01-31 using the local calendar
+    function toIso(d) {
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    // Step 1: ask Java for the customer's details (from payments.txt)
+    async function loadBooking() {
+        const res = await fetch('/api/booking?id=' + encodeURIComponent(bookingId));
+        const booking = await res.json();
+
+        if (booking.error) {
+            errorBox.textContent = booking.error + ' (' + bookingId + ')';
+            proceedBtn.disabled = true;
+            return;
+        }
+
+        document.getElementById('bookingId').value = booking.bookingId;
+        document.getElementById('fullname').value = booking.customerName;
+        document.getElementById('email').value = booking.email;
+        document.getElementById('phone').value = booking.phone;
+
+        // start with today -> today + the rentalDays saved in payments.txt
+        const today = new Date();
+        const end = new Date();
+        end.setDate(today.getDate() + booking.defaultDays - 1);
+        startInput.min = toIso(today);
+        startInput.value = toIso(today);
+        endInput.value = toIso(end);
+
+        updateSummary();
+    }
+
+    // Step 2: every time a date changes, ask Java to recalculate days + total
+    async function updateSummary() {
+        endInput.min = startInput.value;
+        const url = '/api/calculate?id=' + encodeURIComponent(bookingId)
+                  + '&start=' + startInput.value + '&end=' + endInput.value;
+        const result = await (await fetch(url)).json();
+
+        if (result.error) {
+            errorBox.textContent = result.error;
+            proceedBtn.disabled = true;
+            return;
+        }
+        errorBox.textContent = '';
+        proceedBtn.disabled = false;
+
+        document.getElementById('summary-days').textContent = result.days + (result.days === 1 ? ' day' : ' days');
+        document.getElementById('summary-amount').textContent = 'Rs.' + result.total;
+        document.getElementById('summary-total').textContent = 'Rs.' + result.total;
+        document.getElementById('summary-rate').textContent = 'Rs.' + result.pricePerDay + ' per day';
+    }
+
+    startInput.addEventListener('change', updateSummary);
+    endInput.addEventListener('change', updateSummary);
+    loadBooking();
+</script>
+
+</body>
+</html>

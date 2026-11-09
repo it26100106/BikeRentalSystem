@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h2>Bike Rentals</h2>
+        <a href="billing.html" id="back-link" class="back-link" style="text-decoration: none;">Back to Details</a>
+    </header>
+
+    <div class="checkout-container">
+        <div class="left-side">
+            <h1>Payment Details</h1>
+            <form id="payment-form">
+
+                <label>Select Payment Method *</label>
+                <select name="payment_method" id="payment-method" required>
+                    <option value="" disabled selected>Choose payment method</option>
+                    <option value="cash">Cash</option>
+                    <option value="card">Card</option>
+                    <option value="online">Online</option>
+                </select>
+
+                <div id="card-details-selection" style="display: none;">
+                    <label>Cardholder Name *</label>
+                    <input type="text" id="card-name">
+
+                    <label>Card Number *</label>
+                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+
+                    <div class="date-range-container">
+                        <div>
+                            <label>Expiry Date *</label>
+                            <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                        </div>
+
+                        <div>
+                            <label>CVV *</label>
+                            <input type="password" id="card-cvv" maxlength="4">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="pay-btn" class="checkout-btn" style="margin-top: 20px;" disabled>Pay</button>
+            </form>
+        </div>
+
+        <div class="right-side">
+            <h3>Rental Summary</h3>
+            <div class="summary-item">
+                <span id="summary-days">-</span>
+                <span id="summary-amount">-</span>
+            </div>
+            <div class="summary-item">
+                <span>Tax</span>
+                <span>Rs.0</span>
+            </div>
+
+            <div>
+                <hr>
+                <div class="summary-total">
+                    <strong>Total Due</strong>
+                    <strong id="summary-total">-</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // billing.html sent us: payment.html?bookingId=B101&start_date=...&end_date=...
+        const params = new URLSearchParams(location.search);
+        const bookingId = params.get('bookingId');
+        const startDate = params.get('start_date');
+        const endDate   = params.get('end_date');
+
+        const paymentSelect = document.getElementById('payment-method');
+        const cardSection   = document.getElementById('card-details-selection');
+        const cardInputs    = cardSection.querySelectorAll('input');
+        const payBtn        = document.getElementById('pay-btn');
+
+        // no booking info? go back to the start
+        if (!bookingId || !startDate || !endDate) location.href = 'billing.html';
+
+        // "Back to Details" keeps the same booking
+        document.getElementById('back-link').href = 'billing.html?booking=' + encodeURIComponent(bookingId);
+
+        // Ask Java for the same calculation billing.html used -> both summaries always match
+        async function loadSummary() {
+            const url = '/api/calculate?id=' + encodeURIComponent(bookingId) + '&start=' + startDate + '&end=' + endDate;
+            const result = await (await fetch(url)).json();
+
+            if (result.error) {
+                alert(result.error);
+                location.href = 'billing.html?booking=' + encodeURIComponent(bookingId);
+                return;
+            }
+            document.getElementById('summary-days').textContent = result.days + (result.days === 1 ? ' day rental' : ' days rental');
+            document.getElementById('summary-amount').textContent = 'Rs.' + result.total;
+            document.getElementById('summary-total').textContent = 'Rs.' + result.total;
+            payBtn.textContent = 'Pay Rs.' + result.total;
+            payBtn.disabled = false;
+        }
+
+        // show the card boxes only when "Card" is selected
+        paymentSelect.addEventListener('change', function () {
+            const isCard = this.value === 'card';
+            cardSection.style.display = isCard ? 'block' : 'none';
+            cardInputs.forEach(i => i.required = isCard);
+        });
+
+        // send the payment to Java, then show the success / error page
+        document.getElementById('payment-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            payBtn.disabled = true;
+
+            const body = new URLSearchParams({
+                bookingId: bookingId,
+                start: startDate,
+                end: endDate,
+                method: paymentSelect.value,
+                cardName: document.getElementById('card-name').value,
+                cardNumber: document.getElementById('card-number').value,
+                expiry: document.getElementById('card-expiry').value,
+                cvv: document.getElementById('card-cvv').value
+            });
+
+            // used by the "TRY AGAIN" button on the error card
+            const retry = 'bookingId=' + encodeURIComponent(bookingId) + '&start_date=' + startDate + '&end_date=' + endDate;
+
+            try {
+                const res = await fetch('/api/pay', { method: 'POST', body: body });
+                const result = await res.json();
+
+                if (result.success) {
+                    location.href = 'success.html?status=success&paymentId=' + result.paymentId
+                        + '&amount=' + result.amount + '&method=' + result.method + '&payStatus=' + result.status;
+                } else {
+                    location.href = 'success.html?status=error&message=' + encodeURIComponent(result.message) + '&' + retry;
+                }
+            } catch (err) {
+                location.href = 'success.html?status=error&message=' + encodeURIComponent('Could not reach the server.') + '&' + retry;
+            }
+        });
+
+        loadSummary();
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Status</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="status-body">
+
+    <div id="success-card" class="status-card" style="display: none;">
+        <span class="close-btn">&times;</span>
+        <div class="icon-container  success-icon">✓</div>
+        <h2>Success</h2>
+        <p id="success-text">Payment verified successfully.<br>Your bike rental is confirmed!</p>
+        <a href="billing.html"><button class="status-btn success-btn">CONTINUE</button></a>
+    </div>
+
+    <div id="error-card" class="status-card" style="display: none;">
+        <span class="close-btn">&times;</span>
+        <div class="icon-container error-icon">✕</div>
+        <h2>Error!</h2>
+        <p id="error-text">Oops!<br>something went wrong with your payment.</p>
+        <a id="retry-link" href="payment.html"><button class="status-btn error-btn">TRY AGAIN</button></a>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(location.search);
+
+        if (params.get('status') === 'success') {
+            document.getElementById('success-card').style.display = 'block';
+
+            const id = params.get('paymentId');
+            const amount = params.get('amount');
+            const text = document.getElementById('success-text');
+
+            if (params.get('payStatus') === 'Pending') {
+                text.innerHTML = 'Your bike is reserved!<br>Please pay Rs.' + amount + ' in cash at pickup.<br>Payment ID: ' + id;
+            } else {
+                text.innerHTML = 'Payment of Rs.' + amount + ' verified.<br>Your bike rental is confirmed!<br>Payment ID: ' + id;
+            }
+        } else {
+            document.getElementById('error-card').style.display = 'block';
+
+            const message = params.get('message');
+            if (message) {
+                document.getElementById('error-text').innerHTML = 'Oops!<br>' + message.replace(/</g, '&lt;');
+            }
+            // TRY AGAIN goes back to the same booking and dates
+            if (params.get('bookingId')) {
+                document.getElementById('retry-link').href = 'payment.html?bookingId=' + encodeURIComponent(params.get('bookingId'))
+                    + '&start_date=' + params.get('start_date') + '&end_date=' + params.get('end_date');
+            }
+        }
+    </script>
+</body>
+</html>

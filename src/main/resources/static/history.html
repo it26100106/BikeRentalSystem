@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment History</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h2>Bike Rentals</h2>
+        <a href="billing.html" class="back-link" style="text-decoration: none;">Back to Checkout</a>
+    </header>
+
+    <div class="checkout-container">
+        <div class="left-side">
+            <h1>Payment History</h1>
+            <p id="message" class="error-text"></p>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Booking</th><th>Amount</th><th>Date</th><th>Method</th><th>Status</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="rows"></tbody>
+            </table>
+            <p id="empty" class="hint" style="display: none;">No payments yet.</p>
+        </div>
+    </div>
+
+    <script>
+        const rows = document.getElementById('rows');
+        const message = document.getElementById('message');
+
+        // READ: ask Java for every saved payment
+        async function loadPayments() {
+            const payments = await (await fetch('/api/payments')).json();
+            rows.innerHTML = '';
+            document.getElementById('empty').style.display = payments.length === 0 ? 'block' : 'none';
+
+            payments.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML =
+                    '<td>' + p.paymentId + '</td><td>' + p.bookingId + '</td><td>Rs.' + p.amount + '</td>' +
+                    '<td>' + p.date + '</td><td>' + p.method + '</td><td>' + p.status + '</td>' +
+                    '<td>' +
+                    '<button class="small-btn" onclick="changeStatus(\'' + p.paymentId + '\', \'' + (p.status === 'Paid' ? 'Pending' : 'Paid') + '\')">' +
+                    'Mark ' + (p.status === 'Paid' ? 'Pending' : 'Paid') + '</button>' +
+                    '<button class="small-btn danger" onclick="removePayment(\'' + p.paymentId + '\')">Delete</button>' +
+                    '</td>';
+                rows.appendChild(tr);
+            });
+        }
+
+        // sends a POST request to Java, then reloads the table
+        async function sendToJava(url, data) {
+            const result = await (await fetch(url, { method: 'POST', body: new URLSearchParams(data) })).json();
+            message.textContent = result.success ? '' : result.message;
+            loadPayments();
+        }
+
+        // UPDATE
+        function changeStatus(paymentId, newStatus) {
+            sendToJava('/api/update', { paymentId: paymentId, status: newStatus });
+        }
+
+        // DELETE
+        function removePayment(paymentId) {
+            if (confirm('Delete payment ' + paymentId + '?')) {
+                sendToJava('/api/delete', { paymentId: paymentId });
+            }
+        }
+
+        loadPayments();
+    </script>
+</body>
+</html>
