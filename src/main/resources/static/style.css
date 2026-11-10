@@ -1,0 +1,328 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light text */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: #1e1e1e;
+    border-bottom: 1px solid #333;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #ffffff;
+}
+
+.back-link {
+    color: #3b82f6; /* Keep a blue link color, or change to red if preferred */
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.checkout-container {
+    display: flex;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+    gap: 20px; /* Adjusted gap to match screenshot */
+}
+
+.left-side {
+    flex: 1.1;
+    background: #1e1e1e; /* Dark card background */
+    padding: 30px;
+    border-radius: 8px;
+    /* Removed box-shadow for a flatter dark look, added subtle border */
+    border: 1px solid #2a2a2a;
+}
+
+.left-side h1 {
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.right-side {
+    flex: 0.9;
+    background: #1e1e1e;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #2a2a2a;
+    height: fit-content;
+}
+
+.right-side h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #aaaaaa;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #121212; /* Dark input background */
+    color: #ffffff;
+    border: 1px solid #333;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+input:focus, select:focus {
+    border-color: #ef4444; /* Red focus ring to match theme */
+    outline: none;
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.2);
+}
+
+
+.date-range-container {
+    display: flex;
+    gap: 15px;
+}
+
+.date-range-container > div {
+    flex: 1;
+}
+
+.summary-item,
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    font-size: 15px;
+    color: #cccccc;
+}
+
+.summary-total {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #333;
+    margin: 15px 0;
+}
+
+/* Changed button to Red */
+.checkout-btn {
+    width: fit-content; /* Adjusted to match screenshot button width */
+    padding: 12px 24px;
+    background-color: #dc2626; /* Red color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.2s ease;
+}
+
+.checkout-btn:hover {
+    background-color: #b91c1c; /* Darker red on hover */
+}
+
+.status-body{
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #121212;
+    font-family: Arial, sans-serif;
+}
+
+.status-card {
+    background: #1e1e1e;
+    width: 320px;
+    padding: 30px 25px;
+    border-radius: 12px;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    position: relative;
+    color: #e0e0e0;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 18px;
+    color: #666;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.icon-container {
+    width: 70px;
+    height: 70px;
+    margin: 10px auto 20px auto;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    color: white;
+    font-weight: bold;
+}
+
+.success-icon {
+    background-color: #33b864;
+}
+
+.error-icon {
+    background-color: #e76f51;
+}
+
+.status-card h2 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    color: #33b864;
+}
+
+.status-card p {
+    color: #aaaaaa;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.status-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid;
+    transition: all 0.2s ease;
+}
+
+.success-btn {
+    background-color: transparent;
+    color: #33b864;
+    border-color: #33b864;
+}
+
+.success-btn:hover {
+    background-color: #33b864;
+    color: white;
+}
+
+.error-btn {
+    background-color: transparent;
+    color: #e76f51;
+    border-color: #e76f51;
+}
+
+.error-btn:hover {
+    background-color: #e76f51;
+    color: white;
+}
+
+/* ---- additions ---- */
+.error-text {
+    color: #e76f51;
+    font-size: 13px;
+    margin: -10px 0 0 0;
+    min-height: 16px;
+}
+
+.hint {
+    color: #888;
+    font-size: 13px;
+    margin: -8px 0 10px 0;
+}
+
+.checkout-btn:disabled {
+    background-color: #5a2a2a;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* ---- payment history page ---- */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #e0e0e0;
+}
+
+.history-table th,
+.history-table td {
+    text-align: left;
+    padding: 12px 8px;
+    border-bottom: 1px solid #333; /* Darker border */
+}
+
+.history-table th {
+    color: #aaaaaa; /* Lighter gray for headers */
+    font-weight: normal;
+}
+
+.small-btn {
+    border: 1px solid #3b82f6;
+    background: transparent;
+    color: #3b82f6;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 4px;
+}
+
+.small-btn:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.small-btn.danger {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.small-btn.danger:hover {
+    background: #ef4444;
+    color: white;
+}
+
+#error-card h2 {
+    color: #e76f51;
+}
