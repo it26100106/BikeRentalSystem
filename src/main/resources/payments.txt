@@ -1,0 +1,4 @@
+bookingId,userId,price,rentalDays,customerName,email,phone,
+B101,U555,1000,3,Taylor Swift,ts13@email.com,0713131313
+B102,U556,1500,2,Olivia Rodrigo,olivpurple@email.com,0798654321
+B103,U557,1200,5,Amy Green, amy453@email.com,0712345678
