@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RIDEX | Create account</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/layout :: navbar('')}"></div>
+
+    <h1 class="page-title">Welcome to RideX</h1>
+    <p class="sub">Sign in or create an account to continue.</p>
+
+    <div class="grid-2">
+        <div class="card">
+            <h2 class="card-title">Already registered?</h2>
+            <p class="sub">Sign in to manage your bookings, bikes and rides.</p>
+            <a class="btn btn-outline" th:href="@{/users/login}">Sign in</a>
+        </div>
+
+        <form class="card" th:action="@{/users/register}" th:object="${registerDTO}" method="post">
+            <h2 class="card-title">Create account</h2>
+
+            <div class="alert" th:if="${error}" th:text="${error}"></div>
+
+            <div class="field">
+                <label for="name">Full name</label>
+                <input id="name" type="text" th:field="*{name}">
+                <span class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            </div>
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="email" th:field="*{email}">
+                <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+            <div class="field">
+                <label for="password">Password (min 6)</label>
+                <input id="password" type="password" th:field="*{password}">
+                <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label for="phone">Phone</label>
+                    <input id="phone" type="text" th:field="*{phone}">
+                </div>
+                <div class="field">
+                    <label for="role">Role</label>
+                    <select id="role" th:field="*{role}">
+                        <option value="Customer">Customer</option>
+                        <option value="Owner">Owner</option>
+                        <option value="Driver">Driver</option>
+                    </select>
+                    <span class="field-error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+                </div>
+            </div>
+            <div class="field">
+                <label for="address">Address</label>
+                <input id="address" type="text" th:field="*{address}">
+            </div>
+            <button type="submit" class="btn">Register</button>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>
